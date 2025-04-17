@@ -1,12 +1,96 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { StyleSheet, View, Text, TouchableOpacity, Dimensions, SafeAreaView } from 'react-native';
 import CustomHeader from '../components/CustomHeader';
+
+// Componente Skeleton
+const CalculatorSkeleton = () => {
+  const { width } = Dimensions.get('window');
+  const calculatorWidth = Math.min(width - 40, 400);
+
+  return (
+    <SafeAreaView style={styles.safearea}>
+      <CustomHeader />
+      <View style={styles.pageContainer}>
+        <View style={[styles.cardContainer, { width: calculatorWidth }]}>
+          <View style={styles.card}>
+            <View style={styles.display}>
+              <View style={styles.displayTextSkeleton} />
+            </View>
+            
+            <View style={styles.buttons}>
+              {/* Primeira linha de botões */}
+              <View style={styles.row}>
+                {[0, 1, 2, 3].map((i) => (
+                  <View key={`row1-${i}`} style={[
+                    styles.button, 
+                    styles.buttonSkeleton,
+                    i === 3 ? styles.operatorButtonSkeleton : styles.functionButtonSkeleton
+                  ]} />
+                ))}
+              </View>
+              
+              {/* Segunda linha de botões */}
+              <View style={styles.row}>
+                {[0, 1, 2, 3].map((i) => (
+                  <View key={`row2-${i}`} style={[
+                    styles.button, 
+                    styles.buttonSkeleton,
+                    i === 3 ? styles.operatorButtonSkeleton : {}
+                  ]} />
+                ))}
+              </View>
+              
+              {/* Terceira linha de botões */}
+              <View style={styles.row}>
+                {[0, 1, 2, 3].map((i) => (
+                  <View key={`row3-${i}`} style={[
+                    styles.button, 
+                    styles.buttonSkeleton,
+                    i === 3 ? styles.operatorButtonSkeleton : {}
+                  ]} />
+                ))}
+              </View>
+              
+              {/* Quarta linha de botões */}
+              <View style={styles.row}>
+                {[0, 1, 2, 3].map((i) => (
+                  <View key={`row4-${i}`} style={[
+                    styles.button, 
+                    styles.buttonSkeleton,
+                    i === 3 ? styles.operatorButtonSkeleton : {}
+                  ]} />
+                ))}
+              </View>
+              
+              {/* Quinta linha de botões */}
+              <View style={styles.row}>
+                <View style={[styles.button, styles.buttonSkeleton, styles.zeroButton]} />
+                <View style={[styles.button, styles.buttonSkeleton]} />
+                <View style={[styles.button, styles.buttonSkeleton, styles.equalButtonSkeleton]} />
+              </View>
+            </View>
+          </View>
+        </View>
+      </View>
+    </SafeAreaView>
+  );
+};
 
 export default function Calculator() {
   const [displayValue, setDisplayValue] = useState('0');
   const [operator, setOperator] = useState(null);
   const [firstValue, setFirstValue] = useState('');
   const [waitingForSecondValue, setWaitingForSecondValue] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setIsLoading(false);
+    }, 1050);
+
+
+    return () => clearTimeout(timer);
+  }, []);
 
   const handleNumberInput = (num) => {
     if (waitingForSecondValue) {
@@ -104,94 +188,99 @@ export default function Calculator() {
     }
   };
 
+  if (isLoading) {
+    return <CalculatorSkeleton />;
+  }
+
+  // Renderiza o conteúdo real depois do timer
   return (
     <SafeAreaView style={styles.safearea}>
       <CustomHeader />
-    <View style={styles.pageContainer}>
-      <View style={styles.cardContainer}>
-        <View style={styles.card}>
-          <View style={styles.display}>
-            <Text style={styles.displayText} numberOfLines={1} adjustsFontSizeToFit>
-              {displayValue}
-            </Text>
-          </View>
-          
-          <View style={styles.buttons}>
-            <View style={styles.row}>
-              <TouchableOpacity style={[styles.button, styles.functionButton]} onPress={handleClear}>
-                <Text style={styles.functionButtonText}>AC</Text>
-              </TouchableOpacity>
-              <TouchableOpacity style={[styles.button, styles.functionButton]} onPress={handleToggleSign}>
-                <Text style={styles.functionButtonText}>+/-</Text>
-              </TouchableOpacity>
-              <TouchableOpacity style={[styles.button, styles.functionButton]} onPress={handlePercentage}>
-                <Text style={styles.functionButtonText}>%</Text>
-              </TouchableOpacity>
-              <TouchableOpacity style={[styles.button, styles.operatorButton]} onPress={() => handleOperator('÷')}>
-                <Text style={styles.operatorButtonText}>÷</Text>
-              </TouchableOpacity>
+      <View style={styles.pageContainer}>
+        <View style={styles.cardContainer}>
+          <View style={styles.card}>
+            <View style={styles.display}>
+              <Text style={styles.displayText} numberOfLines={1} adjustsFontSizeToFit>
+                {displayValue}
+              </Text>
             </View>
             
-            <View style={styles.row}>
-              <TouchableOpacity style={styles.button} onPress={() => handleNumberInput('7')}>
-                <Text style={styles.buttonText}>7</Text>
-              </TouchableOpacity>
-              <TouchableOpacity style={styles.button} onPress={() => handleNumberInput('8')}>
-                <Text style={styles.buttonText}>8</Text>
-              </TouchableOpacity>
-              <TouchableOpacity style={styles.button} onPress={() => handleNumberInput('9')}>
-                <Text style={styles.buttonText}>9</Text>
-              </TouchableOpacity>
-              <TouchableOpacity style={[styles.button, styles.operatorButton]} onPress={() => handleOperator('×')}>
-                <Text style={styles.operatorButtonText}>×</Text>
-              </TouchableOpacity>
-            </View>
-            
-            <View style={styles.row}>
-              <TouchableOpacity style={styles.button} onPress={() => handleNumberInput('4')}>
-                <Text style={styles.buttonText}>4</Text>
-              </TouchableOpacity>
-              <TouchableOpacity style={styles.button} onPress={() => handleNumberInput('5')}>
-                <Text style={styles.buttonText}>5</Text>
-              </TouchableOpacity>
-              <TouchableOpacity style={styles.button} onPress={() => handleNumberInput('6')}>
-                <Text style={styles.buttonText}>6</Text>
-              </TouchableOpacity>
-              <TouchableOpacity style={[styles.button, styles.operatorButton]} onPress={() => handleOperator('-')}>
-                <Text style={styles.operatorButtonText}>-</Text>
-              </TouchableOpacity>
-            </View>
-            
-            <View style={styles.row}>
-              <TouchableOpacity style={styles.button} onPress={() => handleNumberInput('1')}>
-                <Text style={styles.buttonText}>1</Text>
-              </TouchableOpacity>
-              <TouchableOpacity style={styles.button} onPress={() => handleNumberInput('2')}>
-                <Text style={styles.buttonText}>2</Text>
-              </TouchableOpacity>
-              <TouchableOpacity style={styles.button} onPress={() => handleNumberInput('3')}>
-                <Text style={styles.buttonText}>3</Text>
-              </TouchableOpacity>
-              <TouchableOpacity style={[styles.button, styles.operatorButton]} onPress={() => handleOperator('+')}>
-                <Text style={styles.operatorButtonText}>+</Text>
-              </TouchableOpacity>
-            </View>
-            
-            <View style={styles.row}>
-              <TouchableOpacity style={[styles.button, styles.zeroButton]} onPress={() => handleNumberInput('0')}>
-                <Text style={styles.buttonText}>0</Text>
-              </TouchableOpacity>
-              <TouchableOpacity style={styles.button} onPress={handleDecimal}>
-                <Text style={styles.buttonText}>.</Text>
-              </TouchableOpacity>
-              <TouchableOpacity style={[styles.button, styles.equalButton]} onPress={handleEqual}>
-                <Text style={styles.operatorButtonText}>=</Text>
-              </TouchableOpacity>
+            <View style={styles.buttons}>
+              <View style={styles.row}>
+                <TouchableOpacity style={[styles.button, styles.functionButton]} onPress={handleClear}>
+                  <Text style={styles.functionButtonText}>AC</Text>
+                </TouchableOpacity>
+                <TouchableOpacity style={[styles.button, styles.functionButton]} onPress={handleToggleSign}>
+                  <Text style={styles.functionButtonText}>+/-</Text>
+                </TouchableOpacity>
+                <TouchableOpacity style={[styles.button, styles.functionButton]} onPress={handlePercentage}>
+                  <Text style={styles.functionButtonText}>%</Text>
+                </TouchableOpacity>
+                <TouchableOpacity style={[styles.button, styles.operatorButton]} onPress={() => handleOperator('÷')}>
+                  <Text style={styles.operatorButtonText}>÷</Text>
+                </TouchableOpacity>
+              </View>
+              
+              <View style={styles.row}>
+                <TouchableOpacity style={styles.button} onPress={() => handleNumberInput('7')}>
+                  <Text style={styles.buttonText}>7</Text>
+                </TouchableOpacity>
+                <TouchableOpacity style={styles.button} onPress={() => handleNumberInput('8')}>
+                  <Text style={styles.buttonText}>8</Text>
+                </TouchableOpacity>
+                <TouchableOpacity style={styles.button} onPress={() => handleNumberInput('9')}>
+                  <Text style={styles.buttonText}>9</Text>
+                </TouchableOpacity>
+                <TouchableOpacity style={[styles.button, styles.operatorButton]} onPress={() => handleOperator('×')}>
+                  <Text style={styles.operatorButtonText}>×</Text>
+                </TouchableOpacity>
+              </View>
+              
+              <View style={styles.row}>
+                <TouchableOpacity style={styles.button} onPress={() => handleNumberInput('4')}>
+                  <Text style={styles.buttonText}>4</Text>
+                </TouchableOpacity>
+                <TouchableOpacity style={styles.button} onPress={() => handleNumberInput('5')}>
+                  <Text style={styles.buttonText}>5</Text>
+                </TouchableOpacity>
+                <TouchableOpacity style={styles.button} onPress={() => handleNumberInput('6')}>
+                  <Text style={styles.buttonText}>6</Text>
+                </TouchableOpacity>
+                <TouchableOpacity style={[styles.button, styles.operatorButton]} onPress={() => handleOperator('-')}>
+                  <Text style={styles.operatorButtonText}>-</Text>
+                </TouchableOpacity>
+              </View>
+              
+              <View style={styles.row}>
+                <TouchableOpacity style={styles.button} onPress={() => handleNumberInput('1')}>
+                  <Text style={styles.buttonText}>1</Text>
+                </TouchableOpacity>
+                <TouchableOpacity style={styles.button} onPress={() => handleNumberInput('2')}>
+                  <Text style={styles.buttonText}>2</Text>
+                </TouchableOpacity>
+                <TouchableOpacity style={styles.button} onPress={() => handleNumberInput('3')}>
+                  <Text style={styles.buttonText}>3</Text>
+                </TouchableOpacity>
+                <TouchableOpacity style={[styles.button, styles.operatorButton]} onPress={() => handleOperator('+')}>
+                  <Text style={styles.operatorButtonText}>+</Text>
+                </TouchableOpacity>
+              </View>
+              
+              <View style={styles.row}>
+                <TouchableOpacity style={[styles.button, styles.zeroButton]} onPress={() => handleNumberInput('0')}>
+                  <Text style={styles.buttonText}>0</Text>
+                </TouchableOpacity>
+                <TouchableOpacity style={styles.button} onPress={handleDecimal}>
+                  <Text style={styles.buttonText}>.</Text>
+                </TouchableOpacity>
+                <TouchableOpacity style={[styles.button, styles.equalButton]} onPress={handleEqual}>
+                  <Text style={styles.operatorButtonText}>=</Text>
+                </TouchableOpacity>
+              </View>
             </View>
           </View>
         </View>
       </View>
-    </View>
     </SafeAreaView>
   );
 }
@@ -283,4 +372,24 @@ const styles = StyleSheet.create({
     fontWeight: '600',
     color: '#fff',
   },
+  
+  // Estilos para skeleton
+  displayTextSkeleton: {
+    width: '100%',
+    height: 48,
+    backgroundColor: '#2d3748',
+    borderRadius: 5,
+  },
+  buttonSkeleton: {
+    backgroundColor: '#2d3748',
+  },
+  functionButtonSkeleton: {
+    backgroundColor: '#2d3748',
+  },
+  operatorButtonSkeleton: {
+    backgroundColor: '#8B5500',
+  },
+  equalButtonSkeleton: {
+    backgroundColor: '#8B5500',
+  }
 });

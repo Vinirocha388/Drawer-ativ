@@ -1,5 +1,6 @@
 import { useState } from 'react';
-import { StyleSheet, View, Text, TouchableOpacity, Dimensions } from 'react-native';
+import { StyleSheet, View, Text, TouchableOpacity, Dimensions, SafeAreaView } from 'react-native';
+import CustomHeader from '../components/CustomHeader';
 
 export default function Calculator() {
   const [displayValue, setDisplayValue] = useState('0');
@@ -104,6 +105,8 @@ export default function Calculator() {
   };
 
   return (
+    <SafeAreaView style={styles.safearea}>
+      <CustomHeader />
     <View style={styles.pageContainer}>
       <View style={styles.cardContainer}>
         <View style={styles.card}>
@@ -189,6 +192,7 @@ export default function Calculator() {
         </View>
       </View>
     </View>
+    </SafeAreaView>
   );
 }
 
@@ -196,11 +200,15 @@ const { width } = Dimensions.get('window');
 const calculatorWidth = Math.min(width - 40, 400);
 
 const styles = StyleSheet.create({
+  safearea: {
+    flex: 1,
+    backgroundColor: '#000',
+  },
   pageContainer: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#f0f2f5',
+    backgroundColor: '#000',
   },
   cardContainer: {
     width: calculatorWidth,

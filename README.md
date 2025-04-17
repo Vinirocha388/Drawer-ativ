@@ -40,7 +40,7 @@ npx expo start -- web
 
 ---
 
-### 🫨 Demonstração 
+### 🤩 Demonstração 
 []()https://github.com/user-attachments/assets/fe49b2c3-8761-4ee7-a5d9-099a7596b40e
 
 

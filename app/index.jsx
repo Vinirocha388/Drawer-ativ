@@ -50,8 +50,7 @@ export default function HomeScreen() {
           <Text style={styles.sectionTitle}>Ferramentas Disponíveis</Text>
 
           <TouchableOpacity 
-            style={styles.toolItem} 
-            onPress={() => router.push("../calculator")}>
+            style={styles.toolItem}>
             <Ionicons name="calculator" size={24} color="#fff" />
             <View>
               <Text style={styles.toolName}>Calculadora</Text>
@@ -62,8 +61,7 @@ export default function HomeScreen() {
           </TouchableOpacity>
 
           <TouchableOpacity 
-            style={styles.toolItem} 
-            onPress={() => router.push("../counter")}>
+            style={styles.toolItem}>
             <Ionicons name="add-circle" size={24} color="#fff" />
             <View>
               <Text style={styles.toolName}>Contador</Text>
@@ -74,8 +72,7 @@ export default function HomeScreen() {
           </TouchableOpacity>
 
           <TouchableOpacity 
-            style={styles.toolItem} 
-            onPress={() => router.push("../password-generator")}>
+            style={styles.toolItem}>
             <Ionicons name="key" size={24} color="#fff" />
             <View>
               <Text style={styles.toolName}>Gerador de Senhas</Text>

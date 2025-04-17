@@ -28,39 +28,39 @@ export default function Layout() {
         }}
       />
       <Drawer.Screen
-        name="posts"
+        name="calculator"
         options={{
-          drawerLabel: 'Posts',
-          title: 'Posts',
+          drawerLabel: 'Calculadora',
+          title: 'Calculadora',
           headerShown: false,
           headerLeft: true,
           drawerIcon: ({ size, color }) => (
-            <Ionicons name="chatbubble-outline" size={size} color={color} />
+            <Ionicons name="calculator" size={size} color={color} />
           ),
         }}
       />
       <Drawer.Screen
-        name="login"
+        name="counter"
         options={{
-          drawerLabel: 'Login',
-          title: 'Login',
+          drawerLabel: 'Contador',
+          title: 'COntador',
           headerShown: false,
           headerLeft: true,
           drawerIcon: ({ size, color }) => (
-            <Ionicons name="person" size={size} color={color} />
+            <Ionicons name="add-circle" size={size} color={color} />
           ),
         }}
       />
       <Drawer.Screen
-        name="contact"
+        name="password"
         options={{
-          drawerLabel: 'Contato',
-          title: 'Contato',
+          drawerLabel: 'Gerador de Senhas',
+          title: 'Gerador de Senhas',
           headerShown: false,
           headerShowoginn: false,
           headerLeft: true,
           drawerIcon: ({ size, color }) => (
-            <Ionicons name="call-outline" size={size} color={color} />
+            <Ionicons name="key" size={size} color={color} />
           ),
         }}
       />

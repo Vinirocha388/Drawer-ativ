@@ -4,7 +4,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 import { useRouter } from 'expo-router';
 
-export default function CustomHeader({ title = "Body & Health" }) {
+export default function CustomHeader({ title = "MultiMath" }) {
   const navigation = useNavigation();
   const router = useRouter();
   return (
@@ -16,9 +16,6 @@ export default function CustomHeader({ title = "Body & Health" }) {
 
       {/* Título */}
       <Text style={styles.title} onPress={() => router.push("../")}>{title}</Text>
-
-      {/* Ícone de usuário */}
-      <Ionicons onPress={() => router.push("../login")} name="person-circle-outline" size={40} color="#fff"  />
     </View>
   );
 }
@@ -27,7 +24,7 @@ const styles = StyleSheet.create({
   header: {
     backgroundColor: '#000',
     padding: 20,
-    paddingTop: 10, // para não colar no topo
+    paddingTop: 10, 
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',

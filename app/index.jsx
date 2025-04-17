@@ -9,9 +9,9 @@ import {
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
-import { Drawer } from "expo-router/drawer";
 import CustomHeader from "../components/CustomHeader";
 import { useRouter } from "expo-router";
+import { useWindowDimensions } from "react-native";
 
 export default function HomeScreen() {
   const navigation = useNavigation();
@@ -25,76 +25,95 @@ export default function HomeScreen() {
         {/* BANNER */}
         <ImageBackground
           source={{
-            uri: "https://cdn.prod.website-files.com/64dd05b33f019f79a7ec8f43/66aaa0e993b2326603bcde44_academia-24-horas.webp",
+            uri: "https://img.freepik.com/free-vector/abstract-colorful-technology-background_23-2148897676.jpg",
           }}
           style={styles.banner}
         >
-          <View style={styles.bannerOverlay} /> {/* Camada de opacidade */}
-          <Text style={styles.bannerTitle}>Bem vindo</Text>
+          <View style={styles.bannerOverlay} />
+          <Text style={styles.bannerTitle}>Bem-vindo ao MultiMath</Text>
           <Text style={styles.bannerSubtitle}>
-            Nossos sistemas oferecem treinos e dicas especializadas para que
-            você tenha um excelente uso e uma ótima saúde
+            Seu aplicativo multifuncional com ferramentas úteis para seu dia a dia.
+            Navegue facilmente entre as diferentes funcionalidades usando o menu lateral.
           </Text>
         </ImageBackground>
 
-        {/* Botão de Login */}
-        <TouchableOpacity style={styles.loginButton} onPress={() => router.push("../login")}>
-          <Text style={styles.loginText}>Fazer Login</Text>
+        {/* Botão de Menu */}
+        <TouchableOpacity 
+          style={styles.menuButton} 
+          onPress={() => navigation.openDrawer()}>
+          <Ionicons name="menu" size={24} color="#000" />
+          <Text style={styles.menuButtonText}>Abrir Menu</Text>
         </TouchableOpacity>
 
-        {/* POSTS DA COMUNIDADE */}
+        {/* FERRAMENTAS DISPONÍVEIS */}
         <View style={styles.card}>
-          <Text style={styles.sectionTitle}>Posts da Comunidade</Text>
+          <Text style={styles.sectionTitle}>Ferramentas Disponíveis</Text>
 
-          <View style={styles.post}>
-            <Ionicons name="person-circle" size={24} color="#fff" />
+          <TouchableOpacity 
+            style={styles.toolItem} 
+            onPress={() => router.push("../calculator")}>
+            <Ionicons name="calculator" size={24} color="#fff" />
             <View>
-              <Text style={styles.postName}>Fulano</Text>
-              <Text style={styles.postText}>
-                “Hoje foi pesado, mas ver todo mundo dando o seu melhor me
-                motivou ainda mais!”
+              <Text style={styles.toolName}>Calculadora</Text>
+              <Text style={styles.toolDescription}>
+                Realize cálculos matemáticos básicos e avançados com interface intuitiva
               </Text>
             </View>
-          </View>
+          </TouchableOpacity>
 
-          <View style={styles.post}>
-            <Ionicons name="person-circle" size={24} color="#fff" />
+          <TouchableOpacity 
+            style={styles.toolItem} 
+            onPress={() => router.push("../counter")}>
+            <Ionicons name="add-circle" size={24} color="#fff" />
             <View>
-              <Text style={styles.postName}>Ciclano</Text>
-              <Text style={styles.postText}>
-                “Quem mais ama essa sensação pós-treino? É viciante!”
+              <Text style={styles.toolName}>Contador</Text>
+              <Text style={styles.toolDescription}>
+                Ferramenta simples para incrementar e decrementar valores
               </Text>
             </View>
-            <Ionicons name="heart" size={20} color="red" />
-          </View>
+          </TouchableOpacity>
 
-          <TouchableOpacity style={styles.forumButton} onPress={() => router.push("../posts")}>
-            <Text style={styles.forumText}>Ir para os Posts</Text>
+          <TouchableOpacity 
+            style={styles.toolItem} 
+            onPress={() => router.push("../password-generator")}>
+            <Ionicons name="key" size={24} color="#fff" />
+            <View>
+              <Text style={styles.toolName}>Gerador de Senhas</Text>
+              <Text style={styles.toolDescription}>
+                Crie senhas seguras e personalizáveis com diferentes níveis de complexidade
+              </Text>
+            </View>
           </TouchableOpacity>
         </View>
 
-        {/* SERVIÇOS */}
-        <Text style={styles.sectionTitle}>Nossos Serviços</Text>
+        {/* COMO USAR */}
+        <Text style={styles.sectionTitle}>Como Usar o App</Text>
 
         <View style={styles.serviceCard}>
-          <Text style={styles.serviceTitle}>Musculação</Text>
+          <Text style={styles.serviceTitle}>Menu Drawer</Text>
           <Text style={styles.serviceText}>
-            Treinos personalizados com equipamentos modernos e acompanhamento
-            profissional para ganho de força, definição e resistência.
+            Deslize da esquerda para a direita na tela ou clique no ícone do menu
+            no canto superior esquerdo para acessar todas as ferramentas disponíveis.
           </Text>
         </View>
 
         <View style={styles.serviceCard}>
-          <Text style={styles.serviceTitle}>Natação</Text>
+          <Text style={styles.serviceTitle}>Navegação Simplificada</Text>
           <Text style={styles.serviceText}>
-            Treinos de baixo impacto na piscina, perfeitos para condicionamento
-            físico e fortalecimento sem sobrecarregar as articulações.
+            Acesse rapidamente qualquer ferramenta através do menu lateral e volte
+            facilmente para a tela inicial quando precisar.
           </Text>
         </View>
 
-        <TouchableOpacity style={styles.loginButton} onPress={() => router.push("https://bodyhealthy-web.vercel.app/servicos")}>
-          <Text style={styles.loginText}>Ver Mais</Text>
-        </TouchableOpacity>
+        {/* SOBRE O APP */}
+        <View style={styles.serviceCard}>
+          <Text style={styles.serviceTitle}>Sobre o MultiMath</Text>
+          <Text style={styles.serviceText}>
+            Este aplicativo foi desenvolvido como demonstração da navegação Drawer
+            no React Native, exibindo diferentes funcionalidades em um único aplicativo
+            de forma organizada e intuitiva.
+          </Text>
+        </View>
       </ScrollView>
     </View>
   );
@@ -116,29 +135,32 @@ const styles = StyleSheet.create({
     padding: 20,
   },
   bannerOverlay: {
-    ...StyleSheet.absoluteFillObject, // Preenche todo o espaço do banner
-    backgroundColor: 'rgba(0, 0, 0, 0.67)', // Fundo translúcido
+    ...StyleSheet.absoluteFillObject,
+    backgroundColor: 'rgba(0, 0, 0, 0.67)',
   },
   bannerTitle: {
     fontSize: 26,
     color: '#ffff',
     fontWeight: 'bold',
-    zIndex: 1, // Garante que o texto fique acima da camada de opacidade
+    zIndex: 1,
   },
   bannerSubtitle: {
     color: '#ffff',
     marginTop: 10,
     fontSize: 13,
-    zIndex: 1, // Garante que o texto fique acima da camada de opacidade
+    zIndex: 1,
   },
-  loginButton: {
+  menuButton: {
     backgroundColor: "#fff",
     paddingHorizontal: 30,
     paddingVertical: 10,
     borderRadius: 10,
-    marginTop: 10,
+    marginTop: 15,
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 8,
   },
-  loginText: {
+  menuButtonText: {
     fontWeight: "bold",
     color: "#000",
   },
@@ -152,37 +174,28 @@ const styles = StyleSheet.create({
   sectionTitle: {
     fontWeight: "bold",
     fontSize: 16,
-    marginBottom: 10,
+    marginVertical: 15,
     textAlign: "center",
-    color: "#000",
+    color: "#fff",
   },
-  post: {
+  toolItem: {
     flexDirection: "row",
     alignItems: "center",
     backgroundColor: "#333",
-    padding: 10,
+    padding: 15,
     borderRadius: 10,
     marginBottom: 10,
-    gap: 10,
+    gap: 15,
   },
-  postName: {
+  toolName: {
     color: "#00f2ff",
     fontWeight: "bold",
+    fontSize: 16,
   },
-  postText: {
+  toolDescription: {
     color: "#fff",
-    maxWidth: 230,
-  },
-  forumButton: {
-    backgroundColor: "#333",
-    paddingVertical: 10,
-    borderRadius: 20,
-    alignItems: "center",
-    marginTop: 10,
-  },
-  forumText: {
-    color: "#fff",
-    fontWeight: "bold",
+    maxWidth: 250,
+    fontSize: 12,
   },
   serviceCard: {
     backgroundColor: "#222",
@@ -202,96 +215,38 @@ const styles = StyleSheet.create({
     color: "#ddd",
     fontSize: 13,
     textAlign: "center",
+    lineHeight: 18,
   },
-
-banner: {
-  width: '100%',
-  height: 200,
-  justifyContent: 'center',
-  padding: 20,
-},
-bannerTitle: {
-  fontSize: 26,
-  color: '#ffff',
-  fontWeight: 'bold',
-  zIndex: 1,
-},
-bannerSubtitle: {
-  color: '#ffff',
-  marginTop: 10,
-  fontSize: 13,
-  zIndex: 1,
-},
-loginButton: {
-  backgroundColor: "#fff",
-  paddingHorizontal: 30,
-  paddingVertical: 10,
-  borderRadius: 10,
-  marginTop: 10,
-},
-loginText: {
-  fontWeight: "bold",
-  color: "#000",
-},
-card: {
-  backgroundColor: "#fff",
-  padding: 15,
-  marginTop: 20,
-  borderRadius: 15,
-  width: "90%",
-},
-sectionTitle: {
-  fontWeight: "bold",
-  fontSize: 16,
-  marginBottom: 10,
-  textAlign: "center",
-  color: "#000",
-},
-post: {
-  flexDirection: "row",
-  alignItems: "center",
-  backgroundColor: "#333",
-  padding: 10,
-  borderRadius: 10,
-  marginBottom: 10,
-  gap: 10,
-},
-postName: {
-  color: "#00f2ff",
-  fontWeight: "bold",
-},
-postText: {
-  color: "#fff",
-  maxWidth: 230,
-},
-forumButton: {
-  backgroundColor: "#333",
-  paddingVertical: 10,
-  borderRadius: 20,
-  alignItems: "center",
-  marginTop: 10,
-},
-forumText: {
-  color: "#fff",
-  fontWeight: "bold",
-},
-serviceCard: {
-  backgroundColor: "#222",
-  width: "90%",
-  padding: 20,
-  borderRadius: 15,
-  marginTop: 15,
-},
-serviceTitle: {
-  fontWeight: "bold",
-  fontSize: 16,
-  color: "#fff",
-  marginBottom: 5,
-  textAlign: "center",
-},
-serviceText: {
-  color: "#ddd",
-  fontSize: 13,
-  textAlign: "center",
-},
 });
+
+const { width } = useWindowDimensions();
+
+const responsiveStyles = StyleSheet.create({
+  banner: {
+    height: width > 768 ? 300 : 200,
+  },
+  bannerTitle: {
+    fontSize: width > 768 ? 32 : 26,
+  },
+  bannerSubtitle: {
+    fontSize: width > 768 ? 16 : 13,
+  },
+  menuButton: {
+    paddingHorizontal: width > 768 ? 40 : 30,
+    paddingVertical: width > 768 ? 15 : 10,
+  },
+  menuButtonText: {
+    fontSize: width > 768 ? 18 : 14,
+  },
+  card: {
+    width: width > 768 ? "70%" : "90%",
+  },
+  toolDescription: {
+    maxWidth: width > 768 ? 400 : 250,
+  },
+  serviceCard: {
+    width: width > 768 ? "70%" : "90%",
+  },
+});
+
+const combinedStyles = { ...styles, ...responsiveStyles };

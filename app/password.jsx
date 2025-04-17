@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, SafeAreaView } from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet, SafeAreaView, ToastAndroid, Platform } from 'react-native';
+import * as Clipboard from 'expo-clipboard';
 import CustomHeader from '../components/CustomHeader';
 
 // Componente Skeleton
@@ -10,7 +11,10 @@ const PasswordSkeleton = () => {
       <View style={styles.container}>
         <View style={styles.passwordLabelSkeleton} />
         <View style={styles.passwordSkeleton} />
-        <View style={styles.buttonSkeleton} />
+        <View style={styles.buttonContainerSkeleton}>
+          <View style={styles.buttonSkeleton} />
+          <View style={styles.buttonSkeleton} />
+        </View>
       </View>
     </SafeAreaView>
   );
@@ -19,6 +23,7 @@ const PasswordSkeleton = () => {
 const Password = () => {
   const [password, setPassword] = useState('');
   const [isLoading, setIsLoading] = useState(true);
+  const [copied, setCopied] = useState(false);
   
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -27,6 +32,16 @@ const Password = () => {
 
     return () => clearTimeout(timer);
   }, []);
+
+  // Reset do status de cópia após 2 segundos
+  useEffect(() => {
+    if (copied) {
+      const timer = setTimeout(() => {
+        setCopied(false);
+      }, 2000);
+      return () => clearTimeout(timer);
+    }
+  }, [copied]);
 
   const generatePassword = () => {
     const length = 12;
@@ -39,25 +54,57 @@ const Password = () => {
     }
     
     setPassword(generatedPassword);
+    setCopied(false);
+  };
+
+  const copyToClipboard = async () => {
+    if (!password) return;
+    
+    try {
+      await Clipboard.setStringAsync(password);
+      setCopied(true);
+      
+      // Mostrar feedback em diferentes plataformas
+      if (Platform.OS === 'android') {
+        ToastAndroid.show('Senha copiada!', ToastAndroid.SHORT);
+      }
+    } catch (error) {
+      console.error('Erro ao copiar para a área de transferência:', error);
+    }
   };
 
   if (isLoading) {
     return <PasswordSkeleton />;
   }
 
-  // Renderiza o conteúdo real depois do timer
   return (
     <SafeAreaView style={styles.safeArea}>
       <CustomHeader />
       <View style={styles.container}>
         <Text style={styles.passwordLabel}>Sua senha gerada:</Text>
-        <Text style={styles.password}>{password || "Nenhuma senha gerada"}</Text>
-        <TouchableOpacity 
-          style={styles.button} 
-          onPress={generatePassword}
-        >
-          <Text style={styles.buttonText}>Gerar Senha</Text>
-        </TouchableOpacity>
+        
+        <View style={styles.passwordContainer}>
+          <Text style={styles.password}>{password || "Nenhuma senha gerada"}</Text>
+        </View>
+        
+        <View style={styles.buttonContainer}>
+          <TouchableOpacity 
+            style={styles.button} 
+            onPress={generatePassword}
+          >
+            <Text style={styles.buttonText}>Gerar Senha</Text>
+          </TouchableOpacity>
+          
+          {password && (
+            <TouchableOpacity 
+              style={[styles.button, copied && styles.copiedButton]} 
+              onPress={copyToClipboard}
+              disabled={!password}
+            >
+              <Text style={styles.buttonText}>{copied ? 'Copiado!' : 'Copiar Senha'}</Text>
+            </TouchableOpacity>
+          )}
+        </View>
       </View>
     </SafeAreaView>
   );
@@ -79,17 +126,25 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     color: '#fff',
   },
-  password: {
-    fontSize: 24,
+  passwordContainer: {
+    width: '80%',
     marginBottom: 30,
-    padding: 15,
     borderWidth: 1,
     borderColor: '#fff',
     borderRadius: 8,
     backgroundColor: '#000',
-    minWidth: '80%',
+  },
+  password: {
+    fontSize: 24,
+    padding: 15,
     textAlign: 'center',
     color: '#fff',
+  },
+  buttonContainer: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    width: '100%',
+    gap: 10,
   },
   button: {
     backgroundColor: '#000',
@@ -97,8 +152,12 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     borderWidth: 1,
     borderColor: '#fff',
-    minWidth: '60%',
+    minWidth: '45%',
     alignItems: 'center',
+  },
+  copiedButton: {
+    backgroundColor: '#1e3a8a',
+    borderColor: '#3b82f6',
   },
   buttonText: {
     color: '#fff',
@@ -124,9 +183,15 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     backgroundColor: '#222',
   },
+  buttonContainerSkeleton: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    width: '100%',
+    gap: 10,
+  },
   buttonSkeleton: {
     backgroundColor: '#222',
-    width: '60%',
+    width: '45%',
     height: 50,
     borderRadius: 8,
     borderWidth: 1,
